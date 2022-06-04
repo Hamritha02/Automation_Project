@@ -1,7 +1,7 @@
 #!/bin/bash
 
 name="hamritha"
-s3_bucket="upgrade-hamritha"
+s3_bucket="upgrad-hamritha"
 
 # to update repositories
 apt update -y
@@ -30,12 +30,20 @@ then
     aws s3 cp /tmp/${name}-httpd-logs-${timestamp}.tar s3://${s3_bucket}/${name}-httpd-logs-${timestamp}.tar
 fi
 
-
-
-
-
-
-
+docroot="/var/www/html"
+if [ ! -f ${docroot}/inventory.html ];
+then
+    echo -e 'Log Type\t-\tTime Created\t-\tType\t-\tSize' >{doc}/inventory.html
+fi
+if [[ -f ${docroot}/inventory.html ]];
+then
+    size=$(du -h /tmp/${name}-httpd-logs-${timestamp}.tar | awk '{print $1}')
+	echo -e "httpd-logs\t-\t${timestamp}\t-\ttar\t-\t${size}" >> ${docroot}/invetntory.html
+fi
+if [[ ! -f /etc/cron.d/Automate ]];
+then
+   echo " * * * * * root root/Automation_Project/Automation.sh" >> /etc/cron.d/Automate
+fi
 
 
 
